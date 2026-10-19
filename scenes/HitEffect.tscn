@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://hitfx001"]
+
+[ext_resource type="Script" path="res://scripts/hit_effect.gd" id="1_scr"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hit_effect.png" id="2_tex"]
+
+[node name="HitEffect" type="Node2D"]
+script = ExtResource("1_scr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+hframes = 4
+
+[node name="Label" type="Label" parent="."]
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 3.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 1
+vertical_alignment = 1

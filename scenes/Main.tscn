@@ -1,0 +1,124 @@
+[gd_scene load_steps=14 format=3 uid="uid://main001"]
+
+[ext_resource type="Script" path="res://scripts/game_camera.gd" id="1_cam"]
+[ext_resource type="Script" path="res://scripts/stage_manager.gd" id="2_stg"]
+[ext_resource type="PackedScene" uid="uid://player001" path="res://scenes/Player.tscn" id="3_ply"]
+[ext_resource type="PackedScene" uid="uid://hud001" path="res://scenes/HUD.tscn" id="4_hud"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/skyline.png" id="5_sky"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/buildings.png" id="6_bld"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/road.png" id="7_rod"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/streetlamp.png" id="8_lmp"]
+[ext_resource type="Script" path="res://scripts/sound_manager.gd" id="9_snd"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_top"]
+normal = Vector2(0, 1)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_bot"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_lft"]
+normal = Vector2(1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_rgt"]
+normal = Vector2(-1, 0)
+
+[node name="Main" type="Node2D"]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="SkyLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.2, 0)
+motion_mirroring = Vector2(480, 0)
+
+[node name="SkySprite" type="Sprite2D" parent="ParallaxBackground/SkyLayer"]
+position = Vector2(240, 70)
+texture = ExtResource("5_sky")
+
+[node name="BuildingsLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.5, 0)
+motion_mirroring = Vector2(960, 0)
+
+[node name="BuildingsSprite" type="Sprite2D" parent="ParallaxBackground/BuildingsLayer"]
+position = Vector2(480, 70)
+texture = ExtResource("6_bld")
+
+[node name="RoadLayers" type="Node2D" parent="."]
+
+[node name="Road1" type="Sprite2D" parent="RoadLayers"]
+position = Vector2(480, 200)
+texture = ExtResource("7_rod")
+
+[node name="Road2" type="Sprite2D" parent="RoadLayers"]
+position = Vector2(1440, 200)
+texture = ExtResource("7_rod")
+
+[node name="Streetlamps" type="Node2D" parent="."]
+
+[node name="Lamp1" type="Sprite2D" parent="Streetlamps"]
+position = Vector2(120, 115)
+texture = ExtResource("8_lmp")
+
+[node name="Lamp2" type="Sprite2D" parent="Streetlamps"]
+position = Vector2(360, 115)
+texture = ExtResource("8_lmp")
+
+[node name="Lamp3" type="Sprite2D" parent="Streetlamps"]
+position = Vector2(600, 115)
+texture = ExtResource("8_lmp")
+
+[node name="Lamp4" type="Sprite2D" parent="Streetlamps"]
+position = Vector2(840, 115)
+texture = ExtResource("8_lmp")
+
+[node name="Lamp5" type="Sprite2D" parent="Streetlamps"]
+position = Vector2(1080, 115)
+texture = ExtResource("8_lmp")
+
+[node name="Lamp6" type="Sprite2D" parent="Streetlamps"]
+position = Vector2(1320, 115)
+texture = ExtResource("8_lmp")
+
+[node name="Lamp7" type="Sprite2D" parent="Streetlamps"]
+position = Vector2(1560, 115)
+texture = ExtResource("8_lmp")
+
+[node name="Boundaries" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 6
+
+[node name="TopWall" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(0, 128)
+shape = SubResource("WorldBoundaryShape2D_top")
+
+[node name="BottomWall" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(0, 260)
+shape = SubResource("WorldBoundaryShape2D_bot")
+
+[node name="LeftWall" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(10, 0)
+shape = SubResource("WorldBoundaryShape2D_lft")
+
+[node name="RightWall" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(1880, 0)
+shape = SubResource("WorldBoundaryShape2D_rgt")
+
+[node name="YSortWorld" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Player" parent="YSortWorld" instance=ExtResource("3_ply")]
+position = Vector2(80, 185)
+
+[node name="GameCamera" type="Camera2D" parent="." node_paths=PackedStringArray("follow_target")]
+position = Vector2(240, 135)
+script = ExtResource("1_cam")
+follow_target = NodePath("../YSortWorld/Player")
+
+[node name="StageManager" type="Node2D" parent="." node_paths=PackedStringArray("camera", "player", "y_sort_world")]
+script = ExtResource("2_stg")
+camera = NodePath("../GameCamera")
+player = NodePath("../YSortWorld/Player")
+y_sort_world = NodePath("../YSortWorld")
+
+[node name="SoundManager" type="Node" parent="."]
+script = ExtResource("9_snd")
+
+[node name="HUD" parent="." groups=["hud"] instance=ExtResource("4_hud")]
